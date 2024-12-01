@@ -2,12 +2,11 @@ import re, sys
 from collections import Counter
 from tqdm import tqdm
 
-
 ### Variables
 input_file = 'input.txt'
 output_clean = 'output_clean.txt'
 topList = 10
-limitColocation = 3 
+limitColocation = 3
 
 ### Routine for stripping words from segment
 def strip_list(list,np):
@@ -43,13 +42,13 @@ def clean_file(input_file, output_clean):
     file.writelines(new_lines)
     file.close()
 
-### Open both input (cleaned from step above) and output files 
+### Open both input (cleaned from step above) and output files
     with open(input_file, 'r') as file:
         lines = file.readlines()
         totalLines = sum(1 for _ in open(input_file))
     outFile = open(output_clean, 'w')
 
-### Iterate over each line 
+### Iterate over each line
     for line in tqdm(lines, total=len(lines), unit='lines'):
         text = ("ORG(" + str(linesCount) + "):" + line.strip() + "\n")
         outFile.write(text)
@@ -80,11 +79,12 @@ def clean_file(input_file, output_clean):
         outFile.write('\n')
 
 ### Presentation:
-    print("Removing special characters from list of words")
-    stopwords = [',', '@', '+', '-']
-    for word in list(word_list):  # iterating on a copy since removing will mess things up
+    print("Removing special characters from list of words. Number of elements: " + str(len(word_list)))
+    stopwords = [',', '@', '+', '-', '"', '„', ':', '“']
+    for word in list(word_list):
         if word in stopwords:
             word_list.remove(word)
+    print("Remaining elements: " + str(len(word_list)))
     word_counts = Counter(word_list)
     top_words = word_counts.most_common(topList)
     print("Total: " + str(totalLines))
@@ -105,3 +105,4 @@ except IndexError:
     print("Will consider 3 positions around 'no'")
 
 clean_file(input_file, output_clean)
+~                                      
